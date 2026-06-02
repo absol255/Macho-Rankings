@@ -9,7 +9,7 @@ from flask import (
 )
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from config import Config
-from models import db, User, Admin, Item
+from models import db, User, Admin, Ranking, Applicant
 from decimal import Decimal
 import os
 import time
@@ -78,6 +78,29 @@ def maybe_bootstrap_admin():
         app.logger.exception("bootstrap admin failed")
         db.session.rollback()
 
+def determine_rank(score: int) -> str:
+    if  score < 50:
+        return "No Rank"
+    elif 50 <= score < 55:
+        return "Base"
+    elif 55 <= score < 60:
+        return "Bronze"
+    elif 60 <= score < 65:
+        return "Silver"
+    elif 65 <= score < 70:
+        return "Gold"
+    elif 70 <= score < 75:
+        return "Amethyst"
+    elif 75 <= score < 80:
+        return "Platinum"
+    elif 80 <= score < 85:
+        return "Sapphire"
+    elif 85 <= score < 90:
+        return "Diamond"
+    elif 90 <= score < 95:
+        return "Emerald"
+    else:
+        return "Ruby"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -197,6 +220,24 @@ def api_login():
     session.permanent = True
     login_user(admin)
     return jsonify({"success": True, "username": admin.username})
+
+@app.route("/api/rankings")
+def api_rankings():
+    for applicant in Applicant.query.all():
+        if applicant.done:
+            if Ranking.query.filter_by(username=applicant.username).first():
+                continue
+            ranking = Ranking(username=applicant.username, ranking=determine_rank(applicant.score))
+            db.session.add(ranking)
+            db.session.commit()
+    return jsonify([ranking.to_dict() for ranking in Ranking.query.order_by(Ranking.ranking.asc()).all() if ranking.username != "admin"])
+
+@app.route("/api/ranking")
+def api_ranking():
+    username = request.args.get("username" or "")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+    return jsonify(determine_rank(Applicant.query.filter_by(username=username).first().score))
 
 @app.cli.command("create-admin")
 @click.argument("username")

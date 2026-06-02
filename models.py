@@ -84,6 +84,49 @@ class Ranking(db.Model):
             "ranking": self.ranking,
         }
 
+class Applicant(db.Model):
+    __tablename__ = "applicants"
+
+    id = db.Column(db.BigInteger, primary_key=True)
+
+    username = db.Column(
+        db.String(64),
+        unique=True,
+        nullable=False
+    )
+
+    bank_account_number = db.Column(
+        db.BigInteger,
+        unique=True,
+        nullable=False
+    )
+
+    score = db.Column(
+        db.BigInteger,
+        default=60,
+        nullable=False
+    )
+
+    done = db.Column(
+        db.Boolean, 
+        default=False,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "bank_account_number": self.bank_account_number,
+            "score": self.score,
+            "done": self.done
+        }
+
 class Admin(UserMixin, db.Model):
     __tablename__ = "admins"
 
