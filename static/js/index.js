@@ -22,7 +22,7 @@
                         '<div class="user">' +
                         '<div style="flex:1">' +
                         '<p>' + ranking.username + '</p>' +
-                        '<p>' + ranking.ranking + '</p>' +
+                        '<p class="balance">' + ranking.ranking + '</p>' +
                         "</div>"
                     );
                 }).join("");
