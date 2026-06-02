@@ -34,13 +34,6 @@ class User(db.Model):
         default=999,
     )
 
-    holdings = db.relationship(
-        "Holding",
-        back_populates="user",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-    )
-
     def to_dict(self):
         return {
             "id": self.id,
