@@ -97,6 +97,10 @@ def unauthorized():
 def index():
     return render_template("index.html")
 
+@app.route("/benefits")
+def benefits():
+    return render_template("benefits.html")
+
 @app.route("/admin")
 @login_required
 def admin():
