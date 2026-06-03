@@ -232,12 +232,56 @@ def api_rankings():
             db.session.commit()
     return jsonify([ranking.to_dict() for ranking in Ranking.query.order_by(Ranking.ranking.asc()).all() if ranking.username != "admin"])
 
-@app.route("/api/ranking")
+@app.route("/api/ranking", methods=["POST"])
 def api_ranking():
-    username = request.args.get("username" or "")
+    data = request.get_json(silent=True) or {}
+    username = (data.get("username") or "").strip()
     if not username:
-        return jsonify({"error": "Username is required"}), 400
-    return jsonify(determine_rank(Applicant.query.filter_by(username=username).first().score))
+        return jsonify({"error": "Username is required"}, 400)
+    if not Applicant.query.filter_by(username=username).first():
+        return jsonify({"error": "Username not found"}, 404)
+    return jsonify({
+        "ranking": determine_rank(Applicant.query.filter_by(username=username).first().score)
+    })
+
+@app.route("/api/ranking/session", methods=["POST"])
+def ranking_session():
+    data = request.get_json(silent=True) or {}
+    username = (data.get("username") or "").strip()[:64]
+    bank_raw = data.get("bank_account_number")
+
+    if not username:
+        return jsonify({"error": "Username required"}, 400)
+
+    try:
+        bank_account_number = int(bank_raw)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Valid bank account number required"}, 400)
+
+    user = User.query.filter_by(
+        username=username,
+        bank_account_number=bank_account_number,
+    ).first()
+
+    if not user:
+        return jsonify({"error": "Invalid username or bank account number"}, 401)
+
+    session.permanent = True
+    session["user_id"] = user.id
+    return jsonify(user.to_dict())
+
+def get_ranker():
+    user_id = session.get("user_id")
+    if not user_id:
+        return None
+    return db.session.get(User, user_id)
+
+@app.route("/api/ranking/benefits")
+def ranking_benefits():
+    user = get_ranker()
+
+    if not user:
+        return jsonify({"error": "Not logged in"}, 401)
 
 @app.cli.command("create-admin")
 @click.argument("username")

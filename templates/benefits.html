@@ -15,14 +15,23 @@
     </div>
 
     <nav>
-        <a class="nav" href="/">Home</a>
+        <a class="nav" href="/">Home</a> q  
         <a class="nav" href="/benefits">Benefits</a>
         <a class="nav" href="/admin">Admin Panel</a>
     </nav>
 
     <div class="container">
-        <div class="card">
-            
+        <div class="card" id="signin-card">
+            <h2>Benefits</h2>
+            <p>Sign in with your username and bank account number.</p>
+            <input type="text" id="username" placeholder="Username" maxlength="64" autocomplete="username">
+            <input type="text" id="bankaccnum" placeholder="Bank account number" inputmode="numeric" autocomplete="off">
+            <button class="button" id="signin-btn" type="button">Sign In</button>
+            <p id="signin-msg"></p>
+        </div>
+        <div class="card" id="ranking-card">
+            <h2>Ranking</h2>
+            <div id="user-rank" style="display:none;">Your rank is <span id="rank-value"></span></div>
         </div>
     </div>
 
