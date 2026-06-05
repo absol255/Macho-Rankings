@@ -227,7 +227,7 @@ def api_rankings():
         if applicant.done:
             if Ranking.query.filter_by(username=applicant.username).first():
                 continue
-            ranking = Ranking(username=applicant.username, ranking=determine_rank(applicant.score))
+            ranking = Ranking(username=applicant.username,bank_account_number=applicant.bank_account_number, ranking=determine_rank(applicant.score))
             db.session.add(ranking)
             db.session.commit()
     return jsonify([ranking.to_dict() for ranking in Ranking.query.order_by(Ranking.ranking.asc()).all() if ranking.username != "admin"])
