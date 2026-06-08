@@ -7,11 +7,15 @@
     const rankCard = document.getElementById("ranking-card");
     const rankElement = document.getElementById('user-rank');
     const rankValueElement = document.getElementById('rank-value');
+    const benefitCard = document.getElementById("benefit-card");
+    const benefitValueElement = document.getElementById('benefit-value');
 
     signinBtn.addEventListener("click", function () {
         signinMsg.textContent = "";
         rankCard.style.display = 'none';
         rankElement.style.display = 'none';
+        benefitCard.style.display = 'none';
+        benefitValueElement.textContent = '';
         const username = usernameInput.value.trim();
         const bankAccountNumber = bankAccNum.value.trim();
 
@@ -57,10 +61,23 @@
                     signinCard.style.display = 'none';
                     rankElement.style.display = '';
                     rankCard.style.display = '';
-                }
-            });
+                    fetch("/api/ranking/benefits", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            username: username
+                        })
+                    }).then(function (r) { return r.json(); })
+                    .then(function (res) {
+                        if (!res.ok) {
+                            console.log(res.d.error || "Benefits failed");
+                            return;
+                        }
+                        benefitValueElement.textContent = res.d.benefit;
+                        benefitCard.style.display = '';
+                    });
+                };
+        });
     });
-    rankCard.style.display = 'none';
-    rankElement.style.display = 'none';
-    signinCard.style.display = '';
 })();

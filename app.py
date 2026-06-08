@@ -280,42 +280,28 @@ def get_ranker():
 
 @app.route("/api/ranking/benefits")
 def ranking_benefits():
-    user = get_ranker()
-
-    if not user:
-        return jsonify({"error": "Not logged in"}, 401)
-
-    ranker = Ranking.query.filter_by(username=user.username, bank_account_number=user.bank_account_number).first()
-
-    if not ranker:
-        applicant = Applicant.query.filter_by(username=user.username, bank_account_number=user.bank_account_number).first()
-        if not applicant:
-            applicant = Applicant(username=user.username, bank_account_number=user.bank_account_number, score=0, done=True)
-            db.session.add(applicant)
-            db.session.flush()
-        api_rankings()
-        ranker = Ranking.query.filter_by(username=user.username, bank_account_number=user.bank_account_number).first()
-
-    if ranker.rank == "norank" or "No Rank":
+    data = request.get_json(silent=True) or {}
+    rank = data.get("rank")
+    if rank == "norank" or "No Rank":
         return jsonify({"benefit": "Sorry! You failed D:"})
-
-    if ranker.rank == "Base":
+    if rank == "Base":
         return jsonify({"benefit": "No benefits but able to rank up easier!"})
-
-    if ranker.rank == "Bronze":
+    if rank == "Bronze":
         return jsonify({"benefit": "Macho Casino (coming soon)"})
-    
-    if ranker.rank == "Silver":
+    if rank == "Silver":
         return jsonify({"benefit": "Macho Stock Market and Macho Casino (coming soon)"})
-
-    if ranker.rank == "Gold":
-        return jsonify({"benefit": "Rank up easier and stock market and casino!"})
-
-    if ranker.rank == "Amethyst":
+    if rank == "Amethyst":
         return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
-
-    else:
-        return jsonify({"benefit": "AAAAHHH NOT IMPLEMENTED"})
+    if rank == "Platinum":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
+    if rank == "Sapphire":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
+    if rank == "Diamond":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
+    if rank == "Emerald":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
+    if rank == "Ruby":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
 @app.cli.command("create-admin")
 @click.argument("username")
 @click.argument("password")
