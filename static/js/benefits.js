@@ -66,7 +66,7 @@
                         credentials: "include",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            username: username
+                            rank: rank
                         })
                     }).then(function (r) { return r.json(); })
                     .then(function (res) {
