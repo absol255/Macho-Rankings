@@ -278,7 +278,7 @@ def get_ranker():
         return None
     return db.session.get(User, user_id)
 
-@app.route("/api/ranking/benefits", methods=["POST"], credentials="include")
+@app.route("/api/ranking/benefits", methods=["POST"])
 def ranking_benefits():
     data = request.get_json(silent=True) or {}
     rank = data.get("rank")
