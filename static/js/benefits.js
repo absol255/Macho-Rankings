@@ -4,11 +4,14 @@
     const bankAccNum = document.getElementById("bankaccnum");
     const signinBtn = document.getElementById("signin-btn");
     const signinMsg = document.getElementById("signin-msg");
+    const rankCard = document.getElementById("ranking-card");
     const rankElement = document.getElementById('user-rank');
     const rankValueElement = document.getElementById('rank-value');
 
     signinBtn.addEventListener("click", function () {
         signinMsg.textContent = "";
+        rankCard.style.display = 'none';
+        rankElement.style.display = 'none';
         const username = usernameInput.value.trim();
         const bankAccountNumber = bankAccNum.value.trim();
 
@@ -53,6 +56,7 @@
                     rankValueElement.textContent = rank;
                     signinCard.style.display = 'none';
                     rankElement.style.display = '';
+                    rankCard.style.display = '';
                 }
             });
     });
