@@ -309,8 +309,13 @@ def ranking_benefits():
         return jsonify({"benefit": "Macho Stock Market and Macho Casino (coming soon)"})
 
     if ranker.rank == "Gold":
-        return jsonify({"benefit": "Rank up easier!"})
+        return jsonify({"benefit": "Rank up easier and stock market and casino!"})
 
+    if ranker.rank == "Amethyst":
+        return jsonify({"benefit": "Upper rank groupchat and Stock Market and Casino"})
+
+    else:
+        return jsonify({"benefit": "AAAAHHH NOT IMPLEMENTED"})
 @app.cli.command("create-admin")
 @click.argument("username")
 @click.argument("password")
