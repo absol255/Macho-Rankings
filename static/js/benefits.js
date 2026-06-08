@@ -60,4 +60,7 @@
                 }
             });
     });
+    rankCard.style.display = 'none';
+    rankElement.style.display = 'none';
+    signinCard.style.display = '';
 })();
