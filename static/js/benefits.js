@@ -20,7 +20,7 @@
             return;
         }
 
-        fetch("/api/rankings/session", {
+        fetch("/api/ranking/session", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
