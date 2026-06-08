@@ -282,7 +282,7 @@ def get_ranker():
 def ranking_benefits():
     data = request.get_json(silent=True) or {}
     rank = data.get("rank")
-    if rank == "norank" or "No Rank":
+    if rank in ("norank", "No Rank"):
         return jsonify({"benefit": "Sorry! You failed D:"})
     if rank == "Base":
         return jsonify({"benefit": "No benefits but able to rank up easier!"})

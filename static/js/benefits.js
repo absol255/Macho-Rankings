@@ -68,15 +68,20 @@
                         body: JSON.stringify({
                             rank: rank
                         })
-                    }).then(function (r) { return r.json(); })
-                    .then(function (res) {
-                        if (!res.ok) {
-                            console.log(res.d.error || "Benefits failed");
-                            return;
-                        }
-                        benefitValueElement.textContent = res.d.benefit;
-                        benefitCard.style.display = '';
-                    });
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (d) {
+                                return { ok: r.ok, d: d };
+                            });
+                        })
+                        .then(function (res) {
+                            if (!res.ok) {
+                                console.log(res.d.error || "Benefits failed");
+                                return;
+                            }
+                            benefitValueElement.textContent = res.d.benefit;
+                            benefitCard.style.display = '';
+                        });
                 };
         });
     });
